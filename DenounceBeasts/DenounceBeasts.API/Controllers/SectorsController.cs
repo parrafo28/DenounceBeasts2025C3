@@ -1,4 +1,6 @@
-﻿using DenounceBeasts.API.Models.Entities;
+﻿using DenounceBeasts.API.Data;
+using DenounceBeasts.API.Models.Dtos;
+using DenounceBeasts.API.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
@@ -7,17 +9,37 @@ namespace DenounceBeasts.API.Controllers
     [Route("api/[controller]")]
     public class SectorsController : ControllerBase
     {
-        List<Sector> sectors = new List<Sector>()
+        private readonly ApplicationDbContext _context;
+        public SectorsController(ApplicationDbContext context)
         {
-            new Sector() { Id = 1, PostalCode = "12345", Name = "Sector A" },
-            new Sector() { Id = 2, PostalCode = "67890", Name = "Sector B" },
-            new Sector() { Id = 3, PostalCode = "54321", Name = "Sector C" }
-        };
+
+            _context = context;
+        }
 
         [HttpGet]
-        public ActionResult<List<Sector>> GetAll()
+        public ActionResult<List<SectorDto>> GetAll()
         {
-            return Ok(sectors);
+            var sectors = _context.Sectors.ToList();
+            var list = new List<SectorDto>();
+            //foreach (var sector in sectors)
+            //{
+            //    list.Add(new SectorDto
+            //    {
+            //        Id = sector.Id,
+            //        PostalCode = sector.PostalCode,
+            //        Name = sector.Name,
+            //        MunicipalityId = sector.MunicipalityId
+            //    });
+            //}
+            var selectedSectors = sectors.Select(s => new SectorDto
+            {
+                Id = s.Id,
+                PostalCode = s.PostalCode,
+                Name = s.Name,
+                MunicipalityId = s.MunicipalityId
+            }).ToList();
+
+            return Ok(selectedSectors);
         }
 
         //[HttpGet]
@@ -31,7 +53,7 @@ namespace DenounceBeasts.API.Controllers
         [Route("{id}")]
         public ActionResult<Sector> GetById(int id)
         {
-            var sector = sectors.FirstOrDefault(s => s.Id == id);
+            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
             if (sector == null)
             {
                 return NotFound();
@@ -40,37 +62,52 @@ namespace DenounceBeasts.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Sector> Create(Sector sector)
+        public ActionResult<SectorDto> Create(SectorDto sector)
         {
-            sector.Id = sectors.Count() + 1;
-            sectors.Add(sector);
-            return Ok(sector);
+            //var sectorDb = new Sector();
+            //sectorDb.PostalCode = sector.PostalCode;
+            //sectorDb.Name = sector.Name;
+            //sectorDb.MunicipalityId = sector.MunicipalityId;
+
+            var sectorAtDb = new Sector
+            {
+                MunicipalityId = sector.MunicipalityId,
+                PostalCode = sector.PostalCode,
+                Name = sector.Name 
+            };
+
+            _context.Sectors.Add(sectorAtDb);
+            _context.SaveChanges();
+            return Ok(sectorAtDb.Id);
         }
 
         [HttpPut]
         [Route("{id}")]
         public ActionResult<Sector> Update(int id, Sector updatedSector)
         {
-            var sector = sectors.FirstOrDefault(s => s.Id == id);
+            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
             if (sector == null)
             {
                 return NotFound();
             }
             sector.PostalCode = updatedSector.PostalCode;
             sector.Name = updatedSector.Name;
-            return Ok(sectors);
+            _context.Sectors.Update(sector);
+            _context.SaveChanges();
+            return NoContent();
         }
         [HttpDelete]
         [Route("{id}")]
         public ActionResult Delete(int id)
         {
-            var sector = sectors.FirstOrDefault(s => s.Id == id);
+            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
             if (sector == null)
             {
                 return NotFound();
             }
-            sectors.Remove(sector);
-            return Ok(sectors);
+            _context.Sectors.Remove(sector);
+            _context.SaveChanges();
+            return NoContent();
         }
 
 
