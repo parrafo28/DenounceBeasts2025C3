@@ -19,14 +19,7 @@ namespace DenounceBeasts.API.Controllers
         {
             return Ok(sectors);
         }
-
-        [HttpGet]
-        [Route("getSectors")]
-        public ActionResult<IEnumerable<Sector>> GetSectors()
-        {
-            return Ok(sectors);
-        }
-
+         
         [HttpGet]
         [Route("{id}")]
         public ActionResult<Sector> GetById(int id)

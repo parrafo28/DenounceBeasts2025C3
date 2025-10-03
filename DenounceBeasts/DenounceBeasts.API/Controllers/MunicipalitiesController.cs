@@ -19,14 +19,7 @@ namespace DenounceBeasts.API.Controllers
         {
             return Ok(municipalities);
         }
-
-        [HttpGet]
-        [Route("getMunicipalities")]
-        public ActionResult<IEnumerable<Municipality>> GetMunicipalities()
-        {
-            return Ok(municipalities);
-        }
-
+  
         [HttpGet]
         [Route("{id}")]
         public ActionResult<Municipality> GetById(int id)
