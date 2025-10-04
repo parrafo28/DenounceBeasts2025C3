@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace DenounceBeasts.API.Models.Entities
 {
-    public class Sector
+    // [Table("MUNICIPA_LITIES")]
+    public class Municipality
     {
         [Key]
+        //  public int MunicipalityId { get; set; }
         public int Id { get; set; }
-       // public bool IsActive { get; set; }
+        //public bool IsActive { get; set; }
         public string PostalCode { get; set; } = string.Empty;
+        //[Column("MUNI_CIPALITY_NAME")]
         public string Name { get; set; } = null!;
-        public int MunicipalityId { get; set; }
-        
-        public virtual Municipality Municipality { get; set; }  
+        public virtual List<Sector> Sectors { get; set; }
     }
 }
