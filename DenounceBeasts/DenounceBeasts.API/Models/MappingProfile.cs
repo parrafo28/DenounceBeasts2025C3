@@ -12,9 +12,8 @@ namespace DenounceBeasts.API.Models
             CreateMap<Sector, SectorDto>()
                 .ForMember(dest => dest.MunicipalityName,
                 opt => opt.MapFrom(src => src.Municipality.Name))
-                .ReverseMap();
-
-            //CreateMap<SectorDto, Sector>();
+                .ReverseMap()
+                .ForMember(dest => dest.Municipality, opt => opt.Ignore());
 
             CreateMap<Sector, CreateSectorDto>()
                 .ReverseMap();

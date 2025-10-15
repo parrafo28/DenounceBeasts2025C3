@@ -92,7 +92,6 @@ namespace DenounceBeasts.API.Controllers
             //    Name = sector.Name
             //};
             var sectorAtDb = _mapper.Map<Sector>(request);
-            sectorAtDb.Municipality = null;
             _context.Sectors.Add(sectorAtDb);
             _context.SaveChanges();
             return Ok(sectorAtDb.Id);
