@@ -9,6 +9,6 @@ namespace DenounceBeasts.API.Models.Entities
 
         public string PostalCode { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        List<Sector> Sectors { get; set; } = new List<Sector>();
+        List<Sector> Sectors { get; set; }  
     }
 }

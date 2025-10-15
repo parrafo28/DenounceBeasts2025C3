@@ -1,7 +1,9 @@
-﻿using DenounceBeasts.API.Data;
+﻿using AutoMapper;
+using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Models.Dtos;
 using DenounceBeasts.API.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DenounceBeasts.API.Controllers
 {
@@ -10,16 +12,20 @@ namespace DenounceBeasts.API.Controllers
     public class SectorsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public SectorsController(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+
+        public SectorsController(ApplicationDbContext context, IMapper mapper)
         {
 
             _context = context;
+            this._mapper = mapper;
         }
 
         [HttpGet]
         public ActionResult<List<SectorDto>> GetAll()
         {
-            var sectors = _context.Sectors.ToList();
+            var sectors = _context.Sectors//.Include(p=> p.Municipality)
+                .AsNoTracking().ToList();
             var list = new List<SectorDto>();
             //foreach (var sector in sectors)
             //{
@@ -31,14 +37,22 @@ namespace DenounceBeasts.API.Controllers
             //        MunicipalityId = sector.MunicipalityId
             //    });
             //}
+            //foreach (var sector in sectors)
+            //{
+            //    sector.PostalCode = string.Empty;
+            //    _context.Sectors.Update(sector);
+            //}
+
+            //_context.SaveChanges();
             var selectedSectors = sectors.Select(s => new SectorDto
             {
                 Id = s.Id,
                 PostalCode = s.PostalCode,
                 Name = s.Name,
-                MunicipalityId = s.MunicipalityId
+                MunicipalityId = s.MunicipalityId,
+                MunicipalityName = s.Municipality?.Name
             }).ToList();
-
+           // var selectedSectors = _mapper.Map<List<SectorDto>>(sectors);
             return Ok(selectedSectors);
         }
 
@@ -53,7 +67,9 @@ namespace DenounceBeasts.API.Controllers
         [Route("{id}")]
         public ActionResult<Sector> GetById(int id)
         {
-            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
+            var sector = _context.Sectors
+                .AsNoTracking()
+                .FirstOrDefault(s => s.Id == id);
             if (sector == null)
             {
                 return NotFound();
@@ -62,20 +78,21 @@ namespace DenounceBeasts.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<SectorDto> Create(SectorDto sector)
+        public ActionResult<SectorDto> Create(SectorDto request)
         {
             //var sectorDb = new Sector();
             //sectorDb.PostalCode = sector.PostalCode;
             //sectorDb.Name = sector.Name;
             //sectorDb.MunicipalityId = sector.MunicipalityId;
-
-            var sectorAtDb = new Sector
-            {
-                MunicipalityId = sector.MunicipalityId,
-                PostalCode = sector.PostalCode,
-                Name = sector.Name 
-            };
-
+                        
+            //var sectorAtDb = new Sector
+            //{
+            //    MunicipalityId = sector.MunicipalityId,
+            //    PostalCode = sector.PostalCode,
+            //    Name = sector.Name
+            //};
+            var sectorAtDb = _mapper.Map<Sector>(request);
+            sectorAtDb.Municipality = null;
             _context.Sectors.Add(sectorAtDb);
             _context.SaveChanges();
             return Ok(sectorAtDb.Id);
@@ -86,15 +103,18 @@ namespace DenounceBeasts.API.Controllers
         public ActionResult<Sector> Update(int id, Sector updatedSector)
         {
             var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
-            if (sector == null)
+
+            if (sector != null)
             {
-                return NotFound();
+                sector.PostalCode = updatedSector.PostalCode;
+                sector.Name = updatedSector.Name;
+                _context.Sectors.Update(sector);
+                _context.SaveChanges();
+                return NoContent();
             }
-            sector.PostalCode = updatedSector.PostalCode;
-            sector.Name = updatedSector.Name;
-            _context.Sectors.Update(sector);
-            _context.SaveChanges();
-            return NoContent();
+
+            return NotFound();
+
         }
         [HttpDelete]
         [Route("{id}")]
