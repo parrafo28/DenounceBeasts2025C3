@@ -1,7 +1,9 @@
-﻿using DenounceBeasts.API.Data;
+﻿using AutoMapper;
+using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Models.Dtos;
 using DenounceBeasts.API.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DenounceBeasts.API.Controllers
 {
@@ -10,22 +12,28 @@ namespace DenounceBeasts.API.Controllers
     public class SectorsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public SectorsController(ApplicationDbContext context)
+        public SectorsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public ActionResult<List<SectorDto>> GetAll()
         {
-            var sectors = _context.Sectors.ToList();
-            var sectorsREsponse = sectors.Select(s => new SectorDto
-            {
-                Id = s.Id,
-                Name = s.Name,
-                PostalCode = s.PostalCode
-            }).ToList();
+            var sectors = _context.Sectors
+                .Include(p => p.Municipality)//.ThenInclude(p => p.Sectors)
+                .ToList();
+            //var sectorsREsponse = sectors.Select(s => new SectorDto
+            //{
+            //    Id = s.Id,
+            //    Name = s.Name,
+            //    PostalCode = s.PostalCode,
+            //    MunicipalityName2 = s.Municipality == null ? string.Empty : s.Municipality.Name,
+            //    MunicipalityName = s.Municipality?.Name
+            //}).ToList();
             //var responses = new List<SectorDto>();
             //foreach (var item in sectors)
             //{
@@ -45,9 +53,10 @@ namespace DenounceBeasts.API.Controllers
 
             //}
 
+            var response = _mapper.Map<List<SectorDto>>(sectors);
 
-
-            return Ok(sectorsREsponse);
+             return Ok(response);
+            //return Ok(sectorsREsponse);
         }
 
         [HttpGet]
@@ -63,7 +72,8 @@ namespace DenounceBeasts.API.Controllers
             {
                 Id = sector.Id,
                 Name = sector.Name,
-                PostalCode = sector.PostalCode
+                PostalCode = sector.PostalCode,
+                MunicipalityName = sector.Municipality.Name
             };
             return Ok(response);
         }
@@ -71,12 +81,14 @@ namespace DenounceBeasts.API.Controllers
         [HttpPost]
         public ActionResult<SectorDto> Create(SectorDto request)
         {
-            var sector = new Sector
-            {
-                Name = request.Name,
-                PostalCode = request.PostalCode
-                , MunicipalityId = request.MunicipalityId
-            };
+            //var sector = new Sector
+            //{
+            //    Name = request.Name,
+            //    PostalCode = request.PostalCode  ,
+            //    MunicipalityId = request.MunicipalityId
+            //};
+
+            var sector = _mapper.Map<Sector>(request);
 
             _context.Sectors.Add(sector);
             _context.SaveChanges();
@@ -108,8 +120,8 @@ namespace DenounceBeasts.API.Controllers
                 return NotFound();
             }
             _context.Sectors.Remove(sector);
-         
-             return NoContent();
+
+            return NoContent();
         }
 
     }
