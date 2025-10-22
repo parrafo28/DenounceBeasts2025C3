@@ -18,28 +18,28 @@ namespace DenounceBeasts.API.Controllers
 
         [HttpGet]
         [Route("GetAllPaginated")]
-         public virtual async Task<ActionResult<ApiResponse<PageResult<T>>>> GetAllPaginated([FromQuery] PageRequest request) 
+        public virtual async Task<ActionResult<ApiResponse<PageResult<T>>>> GetAllPaginated([FromQuery] PageRequest request)
         {
             IQueryable<T> query = Set.AsNoTracking();
 
             var page = await query.ToPageAsync(request);
-            return Ok(ApiResponse<PageResult<T>>.Success(page)); 
+            return Ok(ApiResponse<PageResult<T>>.SuccessResponse(page));
         }
 
-        [HttpGet] 
-        public virtual async Task<ActionResult<T>> GetAll()
+        [HttpGet]
+        public virtual async Task<ActionResult<ApiResponse<List<T>>>> GetAll()
         {
-            IQueryable<T> query = Set.AsNoTracking(); 
+            IQueryable<T> query = Set.AsNoTracking();
             var response = Set.AsNoTracking().ToList();
-            return Ok(response);
+            return Ok(ApiResponse<List<T>>.SuccessResponse(response));
         }
 
         [HttpGet("{id:int}")]
         public virtual async Task<ActionResult<ApiResponse<T>>> GetById(int id)
         {
             var entity = await Set.FindAsync(new object[] { id });
-            return entity is null ? NotFound(ApiResponse<T>.Fail("Not found", "404"))
-                : Ok(ApiResponse<T>.Success(entity));
+            return entity is null ? NotFound(ApiResponse<T>.FailResponse(404, "Not found"))
+                : Ok(ApiResponse<T>.SuccessResponse(entity));
         }
 
         [HttpPost]
@@ -47,42 +47,25 @@ namespace DenounceBeasts.API.Controllers
         {
             Set.Add(input);
             await Context.SaveChangesAsync();
-
-            // return CreatedAtAction(nameof(GetById), new { id = input.Id }, ApiResponse<T>.Success(input));
-            //return CreatedAtAction(nameof(GetById), new { input }, ApiResponse<T>.Success(input));
             return Ok(input);
         }
 
-        //[HttpPut("{id:int}")]
-        //public virtual async Task<IActionResult> Update(int id, [FromBody] T input )
-        //{
-        //    var current = await Set.FindAsync(new object[] { id });
-        //    if (current is null) return NotFound(ApiResponse<T>.Fail("Not found", "404"));
-
-        //    // Mapeo manual controlado (evitamos AutoMapper por ahora)
-        //    current = CopyUpdatableFieldsFrom(input);
-        //    current.Updated = DateTime.UtcNow;
-
-        //    await Db.SaveChangesAsync(ct);
-        //    return NoContent();
-        //}
-
         [HttpDelete("{id:int}")]
-        public virtual async Task<IActionResult> Delete(int id )
+        public virtual async Task<IActionResult> Delete(int id)
         {
             var current = await Set.FindAsync(new object[] { id });
-            if (current is null) return NotFound(ApiResponse<T>.Fail("Not found", "404"));
+            if (current is null) return NotFound(ApiResponse<T>.FailResponse(404, "Not found"));
 
             Set.Remove(current);
             await Context.SaveChangesAsync();
             return NoContent();
         }
 
-        
+
     }
 
 
 }
 
- 
- 
+
+

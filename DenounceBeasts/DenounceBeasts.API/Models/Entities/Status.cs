@@ -9,7 +9,7 @@ namespace DenounceBeasts.API.Models.Entities
 
         //[MaxLength(100)]
         //[MinLength(1)]
-        [StringLength(100)]
+        [StringLength(50)]
         public string Name { get; set; }    = string.Empty;
     }
 }

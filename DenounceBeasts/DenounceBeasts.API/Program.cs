@@ -1,4 +1,5 @@
 using DenounceBeasts.API.Data;
+using DenounceBeasts.API.Middleware;
 using DenounceBeasts.API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,13 +23,16 @@ builder.Services.AddAutoMapper(cfg => cfg.LicenseKey = automapperLicence, typeof
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+ 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<ResponseWrappingMiddleware>();
 
 app.UseHttpsRedirection();
 

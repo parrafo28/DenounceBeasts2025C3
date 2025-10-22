@@ -53,6 +53,7 @@ namespace DenounceBeasts.API.Controllers
             municipality.Name = updatedMunicipality.Name;
             return Ok(municipalities);
         }
+
         [HttpDelete]
         [Route("{id}")]
         public ActionResult Delete(int id)

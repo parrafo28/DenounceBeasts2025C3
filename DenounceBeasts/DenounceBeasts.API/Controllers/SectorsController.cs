@@ -2,6 +2,7 @@
 using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Models.Dtos;
 using DenounceBeasts.API.Models.Entities;
+using DenounceBeasts.API.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,84 +23,40 @@ namespace DenounceBeasts.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<SectorDto>> GetAll()
+        public ApiResponse<List<SectorDto>> GetAll()
         {
-            var sectors = _context.Sectors//.Include(p=> p.Municipality)
+            var sectors = _context.Sectors.Include(p => p.Municipality)
                 .AsNoTracking().ToList();
-            var list = new List<SectorDto>();
-            //foreach (var sector in sectors)
-            //{
-            //    list.Add(new SectorDto
-            //    {
-            //        Id = sector.Id,
-            //        PostalCode = sector.PostalCode,
-            //        Name = sector.Name,
-            //        MunicipalityId = sector.MunicipalityId
-            //    });
-            //}
-            //foreach (var sector in sectors)
-            //{
-            //    sector.PostalCode = string.Empty;
-            //    _context.Sectors.Update(sector);
-            //}
 
-            //_context.SaveChanges();
-            var selectedSectors = sectors.Select(s => new SectorDto
-            {
-                Id = s.Id,
-                PostalCode = s.PostalCode,
-                Name = s.Name,
-                MunicipalityId = s.MunicipalityId,
-                MunicipalityName = s.Municipality?.Name
-            }).ToList();
-           // var selectedSectors = _mapper.Map<List<SectorDto>>(sectors);
-            return Ok(selectedSectors);
+            var selectedSectors = _mapper.Map<List<SectorDto>>(sectors);
+            return ApiResponse<List<SectorDto>>.SuccessResponse(selectedSectors);
         }
-
-        //[HttpGet]
-        //[Route("GetSectors")]
-        //public ActionResult<List<Sector>> GetAllx()
-        //{
-        //    return Ok(sectors);
-        //}
 
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<Sector> GetById(int id)
+        public ActionResult<ApiResponse<SectorDto>> GetById(int id)
         {
-            var sector = _context.Sectors
-                .AsNoTracking()
-                .FirstOrDefault(s => s.Id == id);
-            if (sector == null)
-            {
-                return NotFound();
-            }
-            return Ok(sector);
+            var sector = _context.Sectors.AsNoTracking().FirstOrDefault(s => s.Id == id);
+
+            if (sector == null) return NotFound();
+
+            return ApiResponse<SectorDto>.SuccessResponse(_mapper.Map<SectorDto>(sector));
+
         }
 
         [HttpPost]
-        public ActionResult<SectorDto> Create(SectorDto request)
+        public ActionResult<ApiResponse<int>> Create(SectorDto request)
         {
-            //var sectorDb = new Sector();
-            //sectorDb.PostalCode = sector.PostalCode;
-            //sectorDb.Name = sector.Name;
-            //sectorDb.MunicipalityId = sector.MunicipalityId;
-                        
-            //var sectorAtDb = new Sector
-            //{
-            //    MunicipalityId = sector.MunicipalityId,
-            //    PostalCode = sector.PostalCode,
-            //    Name = sector.Name
-            //};
             var sectorAtDb = _mapper.Map<Sector>(request);
             _context.Sectors.Add(sectorAtDb);
             _context.SaveChanges();
-            return Ok(sectorAtDb.Id);
+            return ApiResponse<int>.SuccessResponse(sectorAtDb.Id);
+
         }
 
         [HttpPut]
         [Route("{id}")]
-        public ActionResult<Sector> Update(int id, Sector updatedSector)
+        public ActionResult Update(int id, SectorDto updatedSector)
         {
             var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
 
@@ -128,7 +85,5 @@ namespace DenounceBeasts.API.Controllers
             _context.SaveChanges();
             return NoContent();
         }
-
-
     }
 }
