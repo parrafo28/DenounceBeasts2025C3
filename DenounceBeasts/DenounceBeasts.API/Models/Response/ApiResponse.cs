@@ -1,8 +1,20 @@
 ﻿namespace DenounceBeasts.API.Models.Response
 {
-    public sealed record ApiResponse<T>(bool success, T? Data, string? Message = null, string? ErrorCode = null)
+    public class ApiResponse<T> 
     {
-        public static ApiResponse<T> Success(T data, string? message = null) => new(true, data, message);
-        public static ApiResponse<T> Fail(string message, string? code = null) => new(false, default, message, code);
+        public bool IsSuccess { get; set; }
+        public T Data { get; set; }
+        public string Message { get; set; }
+        public int StatusCode { get; set; }
+
+        public static ApiResponse<T> Success(T data, int code = 200, string message = "")
+        {
+            return new ApiResponse<T> { IsSuccess = true, Data = data, StatusCode = code, Message = message };
+        }
+        public static ApiResponse<T> Fail(int code = 400, string message = "")
+        {
+            return new ApiResponse<T> { IsSuccess = false, StatusCode = code, Message = message };
+        }
+
     }
 }

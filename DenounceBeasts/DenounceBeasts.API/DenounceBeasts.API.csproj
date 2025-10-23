@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\StatusControllerOld.cs" />
+    <Compile Remove="Middleware\ResponseWrappingMiddleware.cs" />
   </ItemGroup>
 
   <ItemGroup>

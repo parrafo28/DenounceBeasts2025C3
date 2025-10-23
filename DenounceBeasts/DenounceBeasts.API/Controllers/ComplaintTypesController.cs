@@ -7,11 +7,12 @@ namespace DenounceBeasts.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class ComplaintTypesController : BaseController<ComplaintType>
-    { 
+    {
         public ComplaintTypesController(ApplicationDbContext context) : base(context)
         {
+
         }
-         
+
         //private readonly ApplicationDbContext _context;
 
         //public ComplaintTypesController(ApplicationDbContext context)
@@ -47,21 +48,22 @@ namespace DenounceBeasts.API.Controllers
         //    return CreatedAtAction(nameof(GetById), new { id = complaintType.Id }, complaintType);
         //}
 
-        //[HttpPut("{id}")]
-        //public ActionResult Update(int id, ComplaintType updatedComplaintType)
-        //{
-        //    var complaintType = _context.ComplaintTypes.FirstOrDefault(s => s.Id == id);
-        //    if (complaintType == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    complaintType.Description = updatedComplaintType.Description;
-        //    complaintType.Name = updatedComplaintType.Name; 
-        //    _context.ComplaintTypes.Update(complaintType);
-        //    _context.SaveChanges();
+        [HttpPut("{id}")]
+        public ActionResult Update(int id, ComplaintType updatedComplaintType)
+        {
+            var complaintType = Context.ComplaintTypes.FirstOrDefault(s => s.Id == id);
+            if (complaintType == null)
+            {
+                return NotFound();
+            }
+            complaintType.Description = updatedComplaintType.Description;
+            complaintType.Name = updatedComplaintType.Name;
+            Context.ComplaintTypes.Update(complaintType);
+            Context.SaveChanges();
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
+
         //[HttpDelete("{id}")]
         //public ActionResult Delete(int id)
         //{

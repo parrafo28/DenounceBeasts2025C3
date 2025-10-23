@@ -1,4 +1,5 @@
 using DenounceBeasts.API.Data;
+using DenounceBeasts.API.Middleware;
 using DenounceBeasts.API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ResponseWrappingMiddleware>();
+ 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

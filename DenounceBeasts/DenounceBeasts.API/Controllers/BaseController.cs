@@ -39,7 +39,7 @@ namespace DenounceBeasts.API.Controllers
         public virtual async Task<ActionResult<ApiResponse<T>>> GetById(int id)
         {
             var entity = await Set.FindAsync(new object[] { id });
-            return (entity is null) ? NotFound(ApiResponse<T>.Fail("Not found", "404"))
+            return (entity is null) ? NotFound(ApiResponse<T>.Fail(404, "Not found"))
                 : Ok(ApiResponse<T>.Success(entity));
         }
 
@@ -72,7 +72,7 @@ namespace DenounceBeasts.API.Controllers
         public virtual async Task<IActionResult> Delete(int id)
         {
             var current = await Set.FindAsync(new object[] { id });
-            if (current is null) return NotFound(ApiResponse<T>.Fail("Not found", "404"));
+            if (current is null) return NotFound(ApiResponse<T>.Fail(404, "Not found"));
 
             Set.Remove(current);
             await Context.SaveChangesAsync();

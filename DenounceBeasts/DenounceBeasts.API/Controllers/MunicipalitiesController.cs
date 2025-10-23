@@ -1,5 +1,6 @@
 ﻿using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Models.Entities;
+using DenounceBeasts.API.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
@@ -16,10 +17,10 @@ namespace DenounceBeasts.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Municipality>> GetAll()
+        public ApiResponse<IEnumerable<Municipality>> GetAll()
         {
             var municipalities = _context.Municipalities.ToList();
-            return Ok(municipalities);
+            return ApiResponse<IEnumerable<Municipality>>.Success(municipalities);
         }
 
         [HttpGet]
@@ -53,7 +54,7 @@ namespace DenounceBeasts.API.Controllers
             }
             municipality.PostalCode = updatedMunicipality.PostalCode;
             municipality.Name = updatedMunicipality.Name;
-          // municipality.IsActive = updatedMunicipality.IsActive;
+            // municipality.IsActive = updatedMunicipality.IsActive;
             _context.Municipalities.Update(municipality);
             _context.SaveChanges();
 

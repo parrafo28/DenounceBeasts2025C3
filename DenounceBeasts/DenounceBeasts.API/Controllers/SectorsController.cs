@@ -55,7 +55,7 @@ namespace DenounceBeasts.API.Controllers
 
             var response = _mapper.Map<List<SectorDto>>(sectors);
 
-             return Ok(response);
+            return Ok(response);
             //return Ok(sectorsREsponse);
         }
 
@@ -63,19 +63,27 @@ namespace DenounceBeasts.API.Controllers
         [Route("{id}")]
         public ActionResult<SectorDto> GetById(int id)
         {
-            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
-            if (sector == null)
-            {
-                return NotFound();
+            try
+            { 
+                var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
+                if (sector == null)
+                {
+                    return NotFound();
+                }
+                var response = new SectorDto
+                {
+                    Id = sector.Id,
+                    Name = sector.Name,
+                    PostalCode = sector.PostalCode,
+                    MunicipalityName = sector.Municipality?.Name
+                };
+                return Ok(response);
             }
-            var response = new SectorDto
+            catch (Exception)
             {
-                Id = sector.Id,
-                Name = sector.Name,
-                PostalCode = sector.PostalCode,
-                MunicipalityName = sector.Municipality.Name
-            };
-            return Ok(response);
+
+                throw;
+            }
         }
 
         [HttpPost]
