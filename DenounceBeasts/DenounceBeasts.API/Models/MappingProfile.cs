@@ -22,6 +22,10 @@ namespace DenounceBeasts.API.Models
 
             #endregion
 
+            CreateMap<Status, StatusDto>().ReverseMap();
+            CreateMap<Municipality, MunicipalityDto>().ReverseMap();
+            CreateMap<ComplaintType, ComplaintTypeDto>().ReverseMap();
+
             ////CreateMap<SectorDto, Sector>();
             //CreateMap<Municipality, MunicipalityDto>()
             //   .ForMember(dest => dest.Sectors, opt => opt.Ignore()).ReverseMap();

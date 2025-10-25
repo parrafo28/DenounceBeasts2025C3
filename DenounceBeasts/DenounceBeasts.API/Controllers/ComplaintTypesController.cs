@@ -40,7 +40,7 @@ namespace DenounceBeasts.API.Controllers
                 Name = s.Name,
             }).ToList();
 
-            return ApiResponse<List<ComplaintTypeDto>>.Success(complaintTypesResponse, "200");
+            return ApiResponse<List<ComplaintTypeDto>>.Success(complaintTypesResponse, 200);
         }
 
 
@@ -50,7 +50,7 @@ namespace DenounceBeasts.API.Controllers
             var complaintType = _context.ComplaintTypes.FirstOrDefault(s => s.Id == id);
             if (complaintType == null)
             {
-                return ApiResponse<ComplaintTypeDto>.Fail("404", "Record no found");
+                return ApiResponse<ComplaintTypeDto>.Fail(404, "Record no found");
             }
 
             var complaintTypeDto = new ComplaintTypeDto
@@ -84,7 +84,7 @@ namespace DenounceBeasts.API.Controllers
             var complaintType = _context.ComplaintTypes.FirstOrDefault(s => s.Id == id);
             if (complaintType == null)
             {
-                return ApiResponse<ComplaintTypeDto>.Fail("404", "Record no found");
+                return ApiResponse<ComplaintTypeDto>.Fail(404, "Record no found");
 
             }
             complaintType.Name = updatedComplaintType.Name;
@@ -101,7 +101,7 @@ namespace DenounceBeasts.API.Controllers
             var complaintType = _context.ComplaintTypes.FirstOrDefault(s => s.Id == id);
             if (complaintType == null)
             {
-                return ApiResponse<ComplaintTypeDto>.Fail("404", "Record no found");
+                return ApiResponse<ComplaintTypeDto>.Fail(404, "Record no found");
 
             }
             _context.ComplaintTypes.Remove(complaintType);

@@ -1,4 +1,5 @@
-﻿using DenounceBeasts.API.Data;
+﻿using AutoMapper;
+using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Models.DTOs;
 using DenounceBeasts.API.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -7,14 +8,30 @@ namespace DenounceBeasts.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class StatusController : BaseController<Status>
+    public class StatusController : BaseController<Status, StatusDto>
     {
         //readonly ApplicationDbContext _context;
 
-        public StatusController(ApplicationDbContext context): base(context)  
+        public StatusController(ApplicationDbContext context, Mapper map) : base(context, map)
         {
             //_context = context;
         }
 
+        [HttpPut("{id}")]
+        public ActionResult Update(int id, SectorDto updatedSector)
+        {
+            var sector = Context.Sectors.FirstOrDefault(s => s.Id == id);
+            if (sector == null)
+            {
+                return NotFound();
+            }
+            sector.Name = updatedSector.Name;
+            sector.PostalCode = updatedSector.PostalCode;
+            //sector.IsActive = updatedSector.IsActive;
+            sector.MunicipalityId = updatedSector.MunicipalityId;
+            Context.Sectors.Update(sector);
+            Context.SaveChanges();
+            return NoContent();
+        } 
     }
 }

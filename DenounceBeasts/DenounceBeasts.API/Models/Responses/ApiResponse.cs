@@ -2,18 +2,18 @@
 {
     public class ApiResponse<T>
     {
-        public bool Sucess { get; set; }
+        public bool IsSuccess { get; set; }
         public T Data { get; set; }
         public string Message { get; set; }
-        public string StatusCode { get; set; }
+        public int StatusCode { get; set; }
 
-        public static ApiResponse<T> Success(T data, string code = "", string message = "")
+        public static ApiResponse<T> Success(T data, int code = 200, string message = "")
         {
-            return new ApiResponse<T> { Sucess = true, Data = data, StatusCode = code, Message = message };
+            return new ApiResponse<T> { IsSuccess = true, Data = data, StatusCode = code, Message = message };
         }
-        public static ApiResponse<T> Fail(string code = "", string message = "")
+        public static ApiResponse<T> Fail(int code = 200, string message = "")
         {
-            return new ApiResponse<T> { Sucess = false, StatusCode = code, Message = message };
+            return new ApiResponse<T> { IsSuccess = false, StatusCode = code, Message = message };
         }
 
     }
