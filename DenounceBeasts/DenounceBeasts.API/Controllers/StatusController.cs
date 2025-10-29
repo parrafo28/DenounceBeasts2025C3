@@ -1,5 +1,6 @@
-﻿using DenounceBeasts.API.Data;
-using DenounceBeasts.API.Models.Entities;
+﻿
+using DenounceBeasts.Domain.Entities;
+using DenounceBeasts.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers

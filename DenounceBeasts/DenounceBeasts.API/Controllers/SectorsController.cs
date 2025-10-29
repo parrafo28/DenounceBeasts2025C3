@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
-using DenounceBeasts.API.Data;
+using Azure.Core;
 using DenounceBeasts.API.Models.Dtos;
-using DenounceBeasts.API.Models.Entities;
 using DenounceBeasts.API.Models.Responses;
+using DenounceBeasts.Domain.Entities;
+using DenounceBeasts.Infrasctructure;
+using DenounceBeasts.Infrasctructure.Data;
+using DenounceBeasts.Infrasctructure.Repositories;
+using DenounceBeasts.Persistence;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DenounceBeasts.API.Controllers
 {
@@ -12,21 +15,28 @@ namespace DenounceBeasts.API.Controllers
     [Route("api/[controller]")]
     public class SectorsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        //private readonly SectorRepository _repo;
+        private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        //private readonly ApplicationDbContext context;
 
-        public SectorsController(ApplicationDbContext context, IMapper mapper)
+        public SectorsController(//SectorRepository repo,
+            UnitOfWork unitOfWork, IMapper mapper)//, ApplicationDbContext context)
         {
 
-            _context = context;
+            //_repo = repo;
+            this._unitOfWork = unitOfWork;
             this._mapper = mapper;
+            //this.context = context;
         }
 
         [HttpGet]
         public ApiResponse<List<SectorDto>> GetAll()
         {
-            var sectors = _context.Sectors.Include(p => p.Municipality)
-                .AsNoTracking().ToList();
+            //var sectors = _repo.GetAll();
+            var sectors = _unitOfWork.SectorRepository.GetAll();
+
+            var status = _unitOfWork.StatusRepository.GetAll();
 
             var selectedSectors = _mapper.Map<List<SectorDto>>(sectors);
             return ApiResponse<List<SectorDto>>.SuccessResponse(selectedSectors);
@@ -36,7 +46,20 @@ namespace DenounceBeasts.API.Controllers
         [Route("{id}")]
         public ActionResult<ApiResponse<SectorDto>> GetById(int id)
         {
-            var sector = _context.Sectors.AsNoTracking().FirstOrDefault(s => s.Id == id);
+            //var sector = _repo.GetById(id);
+            var sector = _unitOfWork.SectorRepository.GetById(id);
+
+            if (sector == null) return NotFound();
+
+            return ApiResponse<SectorDto>.SuccessResponse(_mapper.Map<SectorDto>(sector));
+
+        }
+
+        [HttpGet]
+        [Route("getSectorsByMunicipality/{id}")]
+        public ActionResult<ApiResponse<SectorDto>> GetSectorsByMunicipality(int id)
+        {
+            var sector = _unitOfWork.SectorRepository.GetSectorsByMunicipality(id);
 
             if (sector == null) return NotFound();
 
@@ -48,9 +71,9 @@ namespace DenounceBeasts.API.Controllers
         public ActionResult<ApiResponse<int>> Create(SectorDto request)
         {
             var sectorAtDb = _mapper.Map<Sector>(request);
-            _context.Sectors.Add(sectorAtDb);
-            _context.SaveChanges();
-            return ApiResponse<int>.SuccessResponse(sectorAtDb.Id);
+            var response = _unitOfWork.SectorRepository.Create(sectorAtDb);
+            _unitOfWork.Complete();
+            return ApiResponse<int>.SuccessResponse(response);
 
         }
 
@@ -58,31 +81,20 @@ namespace DenounceBeasts.API.Controllers
         [Route("{id}")]
         public ActionResult Update(int id, SectorDto updatedSector)
         {
-            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
+            var sectorAtDb = _mapper.Map<Sector>(updatedSector);
+            _unitOfWork.SectorRepository.Update(id,sectorAtDb);
+            _unitOfWork.Complete();
 
-            if (sector != null)
-            {
-                sector.PostalCode = updatedSector.PostalCode;
-                sector.Name = updatedSector.Name;
-                _context.Sectors.Update(sector);
-                _context.SaveChanges();
-                return NoContent();
-            }
-
-            return NotFound();
-
+            return NoContent();
         }
+
         [HttpDelete]
         [Route("{id}")]
         public ActionResult Delete(int id)
         {
-            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
-            if (sector == null)
-            {
-                return NotFound();
-            }
-            _context.Sectors.Remove(sector);
-            _context.SaveChanges();
+            _unitOfWork.SectorRepository.Delete(id);
+            _unitOfWork.Complete();
+
             return NoContent();
         }
     }

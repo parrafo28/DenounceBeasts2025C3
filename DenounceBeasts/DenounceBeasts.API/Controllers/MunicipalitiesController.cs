@@ -1,4 +1,4 @@
-﻿using DenounceBeasts.API.Models.Entities;
+﻿using DenounceBeasts.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers

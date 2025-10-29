@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DenounceBeasts.Domain.Core;
+using System.ComponentModel.DataAnnotations;
 
-namespace DenounceBeasts.API.Models.Entities
+namespace DenounceBeasts.Domain.Entities
 {
-    public class Municipality
-    {
-        [Key]
-        public int Id { get; set; }
+    public class Municipality : BaseEntity
+    { 
 
         [StringLength(50, MinimumLength = 2)]
         public string PostalCode { get; set; } = string.Empty;
