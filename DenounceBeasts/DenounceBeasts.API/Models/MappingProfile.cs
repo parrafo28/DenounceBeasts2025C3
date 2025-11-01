@@ -1,5 +1,5 @@
 ﻿using DenounceBeasts.API.Models.Dtos;
-using DenounceBeasts.API.Models.Entities;
+using DenounceBeasts.Domain.Entities;
 
 namespace DenounceBeasts.API.Models
 {

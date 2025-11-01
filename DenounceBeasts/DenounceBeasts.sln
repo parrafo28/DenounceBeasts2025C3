@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36121.58 d17.14
+VisualStudioVersion = 17.14.36121.58
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DenounceBeasts.API", "DenounceBeasts.API\DenounceBeasts.API.csproj", "{957D8E90-D13B-4CA9-A10F-A14BA0804459}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DenounceBeasts.Domain", "DenounceBeasts.Domain\DenounceBeasts.Domain.csproj", "{051100DA-C4B9-4406-9241-EF715DCD2006}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DenounceBeasts.Infrasctructure", "DenounceBeasts.Infrasctructure\DenounceBeasts.Infrasctructure.csproj", "{DCD65047-451A-4045-9BF4-2E9CF249702D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{957D8E90-D13B-4CA9-A10F-A14BA0804459}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{957D8E90-D13B-4CA9-A10F-A14BA0804459}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{957D8E90-D13B-4CA9-A10F-A14BA0804459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{051100DA-C4B9-4406-9241-EF715DCD2006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{051100DA-C4B9-4406-9241-EF715DCD2006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{051100DA-C4B9-4406-9241-EF715DCD2006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{051100DA-C4B9-4406-9241-EF715DCD2006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCD65047-451A-4045-9BF4-2E9CF249702D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCD65047-451A-4045-9BF4-2E9CF249702D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCD65047-451A-4045-9BF4-2E9CF249702D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCD65047-451A-4045-9BF4-2E9CF249702D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

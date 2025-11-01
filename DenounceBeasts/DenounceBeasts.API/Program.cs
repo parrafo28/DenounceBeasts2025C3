@@ -1,7 +1,8 @@
-using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Middleware;
 using DenounceBeasts.API.Models;
-using Microsoft.AspNetCore.Builder;
+using DenounceBeasts.Domain.Entities;
+using DenounceBeasts.Infrasctructure.Data;
+using DenounceBeasts.Infrasctructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+//builder.Services.AddTransient<ComplaintTypeRepository>();
+builder.Services.AddTransient<GenericRespository<ComplaintType>>();
+builder.Services.AddTransient<MunicipalityRepository>();
+builder.Services.AddTransient<SectorRepository>();
+builder.Services.AddTransient<StatusRepository>();
+builder.Services.AddTransient<UnitOfWork>();
+
+//builder.Services.AddSingleton<StatusRepository>();
+//builder.Services.AddScoped<StatusRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -39,7 +51,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionMiddleware>();
 //app.UseMiddleware<ResponseWrappingMiddleware>();
- 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
