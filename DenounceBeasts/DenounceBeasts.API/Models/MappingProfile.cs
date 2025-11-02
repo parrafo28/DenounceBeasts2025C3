@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DenounceBeasts.API.Models.DTOs;
-using DenounceBeasts.API.Models.Entities;
+using DenounceBeasts.Domain.Entities;
 
 namespace DenounceBeasts.API.Models
 {
@@ -15,7 +15,7 @@ namespace DenounceBeasts.API.Models
                 .ReverseMap()
                 .ForMember(dest => dest.Municipality, opt => opt.Ignore());
 
-           // CreateMap<SectorDto, Sector>();
+            // CreateMap<SectorDto, Sector>();
 
             CreateMap<Sector, CreateSectorDto>()
                 .ReverseMap();

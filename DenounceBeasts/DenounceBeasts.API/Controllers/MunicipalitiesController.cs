@@ -1,4 +1,4 @@
-﻿using DenounceBeasts.API.Models.Entities;
+﻿using DenounceBeasts.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
@@ -20,7 +20,7 @@ namespace DenounceBeasts.API.Controllers
             return Ok(municipalities);
         }
 
-         
+
         [HttpGet("{id}")]
         public ActionResult<Municipality> GetById(int id)
         {

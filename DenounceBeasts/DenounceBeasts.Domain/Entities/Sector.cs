@@ -1,13 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DenounceBeasts.Domain.Core;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace DenounceBeasts.API.Models.Entities
+namespace DenounceBeasts.Domain.Entities
 {
-    public class Sector
-    {
-        [Key]
-        public int Id { get; set; }
-       // public bool IsActive { get; set; }
+    public class Sector: BaseEntity
+    { 
         public string PostalCode { get; set; } = string.Empty;
         public string Name { get; set; } = null!;
         public int MunicipalityId { get; set; }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Models.DTOs;
-using DenounceBeasts.API.Models.Entities;
+using DenounceBeasts.Domain.Entities;
+using DenounceBeasts.Infrasctructure.Context;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
@@ -32,6 +32,6 @@ namespace DenounceBeasts.API.Controllers
             Context.Sectors.Update(sector);
             Context.SaveChanges();
             return NoContent();
-        } 
+        }
     }
 }

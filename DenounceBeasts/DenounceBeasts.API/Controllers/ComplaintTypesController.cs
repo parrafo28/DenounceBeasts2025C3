@@ -1,7 +1,7 @@
-﻿using DenounceBeasts.API.Data;
-using DenounceBeasts.API.Models.DTOs;
-using DenounceBeasts.API.Models.Entities;
+﻿using DenounceBeasts.API.Models.DTOs;
 using DenounceBeasts.API.Models.Responses;
+using DenounceBeasts.Domain.Entities;
+using DenounceBeasts.Infrasctructure.Context;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
@@ -105,7 +105,7 @@ namespace DenounceBeasts.API.Controllers
 
             }
             _context.ComplaintTypes.Remove(complaintType);
-            return ApiResponse<ComplaintTypeDto>.Success(null); 
+            return ApiResponse<ComplaintTypeDto>.Success(null);
         }
 
     }

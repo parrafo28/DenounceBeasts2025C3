@@ -1,6 +1,8 @@
-using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Middleware;
 using DenounceBeasts.API.Models;
+using DenounceBeasts.Domain.Entities;
+using DenounceBeasts.Infrasctructure.Context;
+using DenounceBeasts.Infrasctructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,12 +12,30 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+//builder.Services.AddSingleton<SectorRepository>();
+//builder.Services.AddTransient<SectorRepository>();
+//builder.Services.AddScoped<SectorRepository>();
+//builder.Services.AddScoped<ComplaintTypeRepository>();
+builder.Services.AddScoped<GenericRepository<ComplaintType>>();
+builder.Services.AddScoped<MunicipalityRepository>();
+builder.Services.AddScoped<SectorRepository>();
+builder.Services.AddScoped<StatusRepository>();
+builder.Services.AddScoped<UnitOfWork>();
+
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
   
+
+
+
 //var automapperLicence = "ajsdhkajshdkjahskdjhasjkdhakjshdkjahsdkjahskjdhajkshdjkahjkshdjkasdhajkshdjkahsdkj";
 var automapperLicence = builder.Configuration.GetSection("KeysConfigurations:AutomapperLicenceKey").Value;
 //var automapperLicence2 = builder.Configuration.GetSection("AutomapperLicenceKey").Value;

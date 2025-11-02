@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using DenounceBeasts.API.Data;
 using DenounceBeasts.API.Models.DTOs;
-using DenounceBeasts.API.Models.Entities;
+using DenounceBeasts.Domain.Entities;
+using DenounceBeasts.Infrasctructure.Context;
+using DenounceBeasts.Infrasctructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DenounceBeasts.API.Controllers
 {
@@ -13,143 +13,98 @@ namespace DenounceBeasts.API.Controllers
     {
         readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        //private readonly SectorRepository _sectorRepository;
+        //private readonly MunicipalityRepository _municipalityRepository;
+        private readonly UnitOfWork _unitOfWork;
 
-        public SectorsController(ApplicationDbContext context, IMapper mapper)
+        public SectorsController(ApplicationDbContext context, IMapper mapper,
+            //SectorRepository sectorRepository, MunicipalityRepository municipalityRepository,
+            UnitOfWork unitOfWork)
         {
-            //_context = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
             _context = context;
             _mapper = mapper;
+            //_sectorRepository = sectorRepository;
+            //this._municipalityRepository = municipalityRepository;
+            this._unitOfWork = unitOfWork;
+            //_sectorRepository = new SectorRepository(_context);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<SectorDto>> GetAll()
         {
-            var sectors = _context.Sectors.Include(p => p.Municipality)
-                .ToList();
-
-            // var sectorsResponse = new List<SectorDto>();
-            //foreach (var sector in sectors)
-            //{
-            //    sectorsResponse.Add(new SectorDto
-            //    {
-            //        Id = sector.Id,
-            //        //IsActive = sector.IsActive,
-            //        PostalCode = sector.PostalCode,
-            //        Name = sector.Name,
-            //        MunicipalityId = sector.MunicipalityId, 
-            //        MunicipalityName = sector.Municipality.Name
-            //    });
-            //}
-
-            //sectorsResponse = sectors.Select(s => new SectorDto
-            //{
-            //    Id = s.Id,
-            //    //IsActive = s.IsActive,
-            //    PostalCode = s.PostalCode,
-            //    Name = s.Name,
-            //    MunicipalityId = s.MunicipalityId,
-            //    //MunicipalityName = (s.Municipality == null) ? string.Empty: s.Municipality.Name,
-            //    //MunicipalityName = (s.Municipality != null) ? s.Municipality.Name : string.Empty,
-            //    MunicipalityName = s.Municipality?.Name
-
-            //}).ToList();
-            var sectorsResponse = _mapper.Map<List<SectorDto>>(sectors);
+            var sectors = _unitOfWork.SectorRepository.GetAll();
+            //var sectors = _sectorRepository.GetAll();
+            var sectorsResponse = MapFromSectorToSectorDto(sectors);
             return Ok(sectorsResponse);
         }
 
-        //[HttpGet]
-        //[Route("GetAllSector")]
-        //public ActionResult<IEnumerable<Sector>> GetAllx()
-        //{
-        //    return Ok(sectors);
-        //}
 
-        //[HttpGet("GetAllSectorv2")]
-        //public ActionResult<IEnumerable<Sector>> GetAllxx()
-        //{
-        //    return Ok(sectors);
-        //}
+        [HttpGet]
+        [Route("with-municipality")]
+        public ActionResult<IEnumerable<SectorDto>> GetAllWithMunicipality()
+        {
+            var sectors = _unitOfWork.SectorRepository.GetAllWithMunicipality();
+            var sectorsResponse = MapFromSectorToSectorDto(sectors);
 
-        //[HttpGet("/GetAllSectorv3")]
-        //public ActionResult<IEnumerable<Sector>> GetAllxxx()
-        //{
-        //    return Ok(sectors);
-        //}
-        // [HttpGet("{id:int}")]
+            var municipalit = _unitOfWork.MunicipalityRepository.GetAll();
+            return Ok(sectorsResponse);
+        }
+
         [HttpGet("{id}")]
         public ActionResult<SectorDto> GetById(int id)
         {
-            var sector = _context.Sectors.Include(p=>p.Municipality)
-                .FirstOrDefault(s => s.Id == id);
+            var sector = _unitOfWork.SectorRepository.GetById(id);
             if (sector == null)
             {
                 return NotFound();
             }
 
-            //var sectorDto = new SectorDto
-            //{
-            //    Id = sector.Id,
-            //    //IsActive = sector.IsActive,
-            //    PostalCode = sector.PostalCode,
-            //    Name = sector.Name,
-            //    MunicipalityId = sector.MunicipalityId,
-            //    MunicipalityName = sector.Municipality.Name
-
-            //};
-           var sectorDto = _mapper.Map<SectorDto>(sector);
+            var sectorDto = _mapper.Map<SectorDto>(sector);
             return Ok(sectorDto);
         }
 
         [HttpPost]
         public ActionResult<CreateSectorResponse> Create(SectorDto request)
         {
-            //var sector = new Sector
-            //{
-            //    //IsActive = request.IsActive,
-            //    PostalCode = request.PostalCode,
-            //    Name = request.Name,
-            //    MunicipalityId = request.MunicipalityId
-            //};
 
             var sector = _mapper.Map<Sector>(request);
-            _context.Sectors.Add(sector);
-            _context.SaveChanges();
-            // request.Id = sector.Id;
-            //  return CreatedAtAction(nameof(GetById), new { id = sector.Id }, sector);
-            return Ok(new SectorDto { Id = sector.Id });
-            // return Ok(request);
+            var id = _unitOfWork.SectorRepository.Create(sector);
+            _unitOfWork.Complete();
+
+            //var idx = sector.Id;
+            return Ok(new SectorDto { Id = id });
         }
 
         [HttpPut("{id}")]
         public ActionResult Update(int id, SectorDto updatedSector)
         {
-            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
+            var sector = _unitOfWork.SectorRepository.GetById(id);
             if (sector == null)
             {
                 return NotFound();
             }
             sector.Name = updatedSector.Name;
             sector.PostalCode = updatedSector.PostalCode;
-            //sector.IsActive = updatedSector.IsActive;
             sector.MunicipalityId = updatedSector.MunicipalityId;
-            _context.Sectors.Update(sector);
-            _context.SaveChanges();
+            _unitOfWork.SectorRepository.Update(sector);
+            //  _sectorRepository.SaveChanges();
+            _unitOfWork.Complete();
+
             return NoContent();
-            // return Ok(sectors);
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var sector = _context.Sectors.FirstOrDefault(s => s.Id == id);
-            if (sector == null)
-            {
-                return NotFound();
-            }
-            _context.Sectors.Remove(sector);
-            _context.SaveChanges();
+            _unitOfWork.SectorRepository.Delete(id);
+            _unitOfWork.Complete();
+
             return NoContent();
-            // return Ok(sectors);
+        }
+
+        private List<SectorDto> MapFromSectorToSectorDto(List<Sector> sectors)
+        {
+            return _mapper.Map<List<SectorDto>>(sectors);
         }
 
     }
