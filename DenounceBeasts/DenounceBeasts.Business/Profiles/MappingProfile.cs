@@ -1,7 +1,7 @@
-﻿using DenounceBeasts.API.Models.Dtos;
+﻿using DenounceBeasts.Business.Dtos;
 using DenounceBeasts.Domain.Entities;
 
-namespace DenounceBeasts.API.Models
+namespace DenounceBeasts.Business.Profiles
 {
     public class MappingProfile : AutoMapper.Profile
     {

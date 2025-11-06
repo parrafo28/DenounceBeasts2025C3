@@ -1,4 +1,4 @@
-﻿namespace DenounceBeasts.API.Models.Dtos
+﻿namespace DenounceBeasts.Business.Dtos
 {
     public class SectorDto
     {

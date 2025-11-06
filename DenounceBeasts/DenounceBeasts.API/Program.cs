@@ -1,5 +1,5 @@
 using DenounceBeasts.API.Middleware;
-using DenounceBeasts.API.Models;
+using DenounceBeasts.Business.Profiles;
 using DenounceBeasts.Domain.Entities;
 using DenounceBeasts.Infrasctructure.Data;
 using DenounceBeasts.Infrasctructure.Repositories;

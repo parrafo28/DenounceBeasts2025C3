@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DenounceBeasts.API.Models.Responses
+namespace DenounceBeasts.Business.Responses
 {
     public sealed record PageRequest(int Page = 1, int PageSize = 2, string? Sort = null, bool Desc = false, string? Q = null);
 

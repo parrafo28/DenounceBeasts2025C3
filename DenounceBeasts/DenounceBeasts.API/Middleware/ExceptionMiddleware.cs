@@ -1,6 +1,4 @@
-﻿using DenounceBeasts.API.Models.Response;
-using DenounceBeasts.API.Models.Responses;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using DenounceBeasts.Business.Responses;
 using System.Text.Json;
 
 namespace DenounceBeasts.API.Middleware
