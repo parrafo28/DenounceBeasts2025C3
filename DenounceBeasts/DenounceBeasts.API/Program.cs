@@ -1,3 +1,4 @@
+using DenounceBeasts.API.Controllers;
 using DenounceBeasts.API.Middleware;
 using DenounceBeasts.Business.Profiles;
 using DenounceBeasts.Domain.Entities;
@@ -19,6 +20,8 @@ builder.Services.AddTransient<MunicipalityRepository>();
 builder.Services.AddTransient<SectorRepository>();
 builder.Services.AddTransient<StatusRepository>();
 builder.Services.AddTransient<UnitOfWork>();
+
+builder.Services.AddTransient<SectorService>();
 
 //builder.Services.AddSingleton<StatusRepository>();
 //builder.Services.AddScoped<StatusRepository>();
