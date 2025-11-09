@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DenounceBeasts.API.Models.Responses;
+using DenounceBeasts.Application.Responses;
 using DenounceBeasts.Infrasctructure.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

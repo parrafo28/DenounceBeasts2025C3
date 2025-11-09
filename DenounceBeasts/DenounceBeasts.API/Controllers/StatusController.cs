@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DenounceBeasts.API.Models.DTOs;
+using DenounceBeasts.Application.DTOs;
 using DenounceBeasts.Domain.Entities;
 using DenounceBeasts.Infrasctructure.Context;
 using Microsoft.AspNetCore.Mvc;

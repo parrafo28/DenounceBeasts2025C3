@@ -1,4 +1,4 @@
-﻿using DenounceBeasts.API.Models.Responses;
+﻿using DenounceBeasts.Application.Responses;
 using System.Text;
 using System.Text.Json;
 

@@ -1,5 +1,6 @@
+using DenounceBeasts.API.Controllers;
 using DenounceBeasts.API.Middleware;
-using DenounceBeasts.API.Models;
+using DenounceBeasts.Application;
 using DenounceBeasts.Domain.Entities;
 using DenounceBeasts.Infrasctructure.Context;
 using DenounceBeasts.Infrasctructure.Repositories;
@@ -17,25 +18,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //builder.Services.AddTransient<SectorRepository>();
 //builder.Services.AddScoped<SectorRepository>();
 //builder.Services.AddScoped<ComplaintTypeRepository>();
+
+//Repositories
 builder.Services.AddScoped<GenericRepository<ComplaintType>>();
 builder.Services.AddScoped<MunicipalityRepository>();
 builder.Services.AddScoped<SectorRepository>();
 builder.Services.AddScoped<StatusRepository>();
 builder.Services.AddScoped<UnitOfWork>();
 
-
+//Services
+builder.Services.AddScoped<SectorService>();
+  
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-
-
-
-
+ 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-  
-
-
-
+   
 //var automapperLicence = "ajsdhkajshdkjahskdjhasjkdhakjshdkjahsdkjahskjdhajkshdjkahjkshdjkasdhajkshdjkahsdkj";
 var automapperLicence = builder.Configuration.GetSection("KeysConfigurations:AutomapperLicenceKey").Value;
 //var automapperLicence2 = builder.Configuration.GetSection("AutomapperLicenceKey").Value;

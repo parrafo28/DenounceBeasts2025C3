@@ -33,10 +33,9 @@ namespace DenounceBeasts.Infrasctructure.Repositories
             return entity;
         }
 
-        public int Create(TEntity request)
+        public void Create(TEntity request)
         {
-            _context.Set<TEntity>().Add(request);
-            return request.Id;
+            _context.Set<TEntity>().Add(request); 
         }
 
         public TEntity CreateAndReturnEntity(TEntity request)

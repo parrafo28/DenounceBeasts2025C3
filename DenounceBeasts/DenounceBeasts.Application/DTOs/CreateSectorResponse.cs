@@ -1,4 +1,4 @@
-﻿namespace DenounceBeasts.API.Models.DTOs
+﻿namespace DenounceBeasts.Application.DTOs
 {
     public class CreateSectorResponse
     {

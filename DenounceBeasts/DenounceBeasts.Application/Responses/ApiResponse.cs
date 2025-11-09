@@ -1,4 +1,4 @@
-﻿namespace DenounceBeasts.API.Models.Responses
+﻿namespace DenounceBeasts.Application.Responses
 {
     public class ApiResponse<T>
     {

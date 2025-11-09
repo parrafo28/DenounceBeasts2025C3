@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using DenounceBeasts.API.Models.DTOs;
+using DenounceBeasts.Application.DTOs;
 using DenounceBeasts.Domain.Entities;
 
-namespace DenounceBeasts.API.Models
+namespace DenounceBeasts.Application
 {
     public class MappingProfile : Profile
     {
