@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using DenounceBeasts.API.Models.Dtos;
+using DenounceBeasts.Application.Dtos;
 using DenounceBeasts.Domain.Entities;
 
-namespace DenounceBeasts.API.Models
+namespace DenounceBeasts.Application
 {
     public class MappingProfile : Profile
     {
@@ -18,8 +18,7 @@ namespace DenounceBeasts.API.Models
             CreateMap<Sector, CreateSectorDto>()
                 .ReverseMap();
 
-            #endregion
-
+            #endregion 
         }
     }
 }

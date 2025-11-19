@@ -1,6 +1,6 @@
 ﻿
 using DenounceBeasts.Domain.Entities;
-using DenounceBeasts.Persistence;
+using DenounceBeasts.Infrasctructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
@@ -31,6 +31,6 @@ namespace DenounceBeasts.API.Controllers
             _context.SaveChanges();
             return Ok(status);
         }
-         
+
     }
 }

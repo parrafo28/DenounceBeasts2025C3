@@ -1,5 +1,6 @@
 using DenounceBeasts.API.Middleware;
-using DenounceBeasts.API.Models;
+using DenounceBeasts.Application;
+using DenounceBeasts.Application.Services;
 using DenounceBeasts.Domain.Entities;
 using DenounceBeasts.Infrasctructure;
 using DenounceBeasts.Infrasctructure.Repositories;
@@ -19,10 +20,11 @@ builder.Services.AddTransient<UnitOfWork>();
 //builder.Services.AddSingleton<SectorRepository>();
 //builder.Services.AddScoped<SectorRepository>();
 
+builder.Services.AddTransient<SectorService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -40,7 +42,6 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

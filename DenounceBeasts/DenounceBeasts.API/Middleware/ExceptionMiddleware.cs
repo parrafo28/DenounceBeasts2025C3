@@ -1,5 +1,4 @@
-﻿using DenounceBeasts.API.Models.Responses;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using DenounceBeasts.Application.Responses;
 using System.Text.Json;
 
 namespace DenounceBeasts.API.Middleware
@@ -33,11 +32,11 @@ namespace DenounceBeasts.API.Middleware
                 var errorMsg = context.Response.StatusCode == 400
                     ? ex.Message  // si es excepción conocida tipo ArgumentException, enviamos su mensaje
                     : "Ha ocurrido un error inesperado en el servidor"; // mensaje genérico para 500
-                var isInDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";    
+                var isInDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
                 if (isInDevelopment && context.Response.StatusCode == 500)
                 {
                     errorMsg += $": {ex}"; // en desarrollo, añadimos el mensaje de la excepción
-            
+
                 }
                 var errorResponse = new ApiResponse<string>
                 {

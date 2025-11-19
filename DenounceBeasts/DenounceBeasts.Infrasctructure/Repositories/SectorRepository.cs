@@ -1,5 +1,4 @@
 ﻿using DenounceBeasts.Domain.Entities;
-using DenounceBeasts.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace DenounceBeasts.Infrasctructure.Repositories
@@ -69,6 +68,6 @@ namespace DenounceBeasts.Infrasctructure.Repositories
             _db.Sectors.Remove(sector);
         }
 
-     
+
     }
 }

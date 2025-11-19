@@ -1,6 +1,6 @@
-﻿using DenounceBeasts.API.Models.Dtos;
+﻿using DenounceBeasts.Application.Dtos;
 using DenounceBeasts.Domain.Entities;
-using DenounceBeasts.Persistence;
+using DenounceBeasts.Infrasctructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,16 +22,16 @@ namespace DenounceBeasts.API.Controllers
         {
             var complaintTypes = _context.ComplaintTypes.Skip(15).Take(15).AsNoTracking().ToList();
             var list = new List<ComplaintTypeDto>();
-            
+
             var selectedComplaintTypes = complaintTypes.Select(s => new ComplaintTypeDto
             {
-                Id = s.Id, 
+                Id = s.Id,
                 Name = s.Name,
                 Description = s.Description
             }).ToList();
 
             return Ok(selectedComplaintTypes);
-        } 
+        }
 
         [HttpGet]
         [Route("{id}")]
@@ -48,10 +48,10 @@ namespace DenounceBeasts.API.Controllers
         [HttpPost]
         public ActionResult<ComplaintTypeDto> Create(ComplaintTypeDto complaintType)
         {
-           
+
             var complaintTypeAtDb = new ComplaintType
             {
-                Description = complaintType.Description, 
+                Description = complaintType.Description,
                 Name = complaintType.Name
             };
 

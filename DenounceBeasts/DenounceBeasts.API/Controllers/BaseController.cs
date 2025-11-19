@@ -1,5 +1,5 @@
-﻿using DenounceBeasts.API.Models.Responses;
-using DenounceBeasts.Persistence;
+﻿using DenounceBeasts.Application.Responses;
+using DenounceBeasts.Infrasctructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

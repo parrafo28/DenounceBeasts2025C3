@@ -1,12 +1,6 @@
-﻿using AutoMapper;
-using Azure.Core;
-using DenounceBeasts.API.Models.Dtos;
-using DenounceBeasts.API.Models.Responses;
-using DenounceBeasts.Domain.Entities;
-using DenounceBeasts.Infrasctructure;
-using DenounceBeasts.Infrasctructure.Data;
-using DenounceBeasts.Infrasctructure.Repositories;
-using DenounceBeasts.Persistence;
+﻿using DenounceBeasts.Application.Dtos;
+using DenounceBeasts.Application.Responses;
+using DenounceBeasts.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
@@ -15,18 +9,22 @@ namespace DenounceBeasts.API.Controllers
     [Route("api/[controller]")]
     public class SectorsController : ControllerBase
     {
-        //private readonly SectorRepository _repo;
-        private readonly UnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly SectorService _sectorService;
+
+        ////private readonly SectorRepository _repo;
+        //private readonly UnitOfWork _unitOfWork;
+        //private readonly IMapper _mapper;
         //private readonly ApplicationDbContext context;
 
-        public SectorsController(//SectorRepository repo,
-            UnitOfWork unitOfWork, IMapper mapper)//, ApplicationDbContext context)
+        public SectorsController(SectorService sectorService //SectorRepository repo,
+                                                             // UnitOfWork unitOfWork, IMapper mapper
+           )//, ApplicationDbContext context)
         {
+            this._sectorService = sectorService;
 
-            //_repo = repo;
-            this._unitOfWork = unitOfWork;
-            this._mapper = mapper;
+            ////_repo = repo;
+            //this._unitOfWork = unitOfWork;
+            //this._mapper = mapper;
             //this.context = context;
         }
 
@@ -34,12 +32,13 @@ namespace DenounceBeasts.API.Controllers
         public ApiResponse<List<SectorDto>> GetAll()
         {
             //var sectors = _repo.GetAll();
-            var sectors = _unitOfWork.SectorRepository.GetAll();
+            //var sectors = _unitOfWork.SectorRepository.GetAll();
 
-            var status = _unitOfWork.StatusRepository.GetAll();
+            //var status = _unitOfWork.StatusRepository.GetAll();
 
-            var selectedSectors = _mapper.Map<List<SectorDto>>(sectors);
-            return ApiResponse<List<SectorDto>>.SuccessResponse(selectedSectors);
+            //var selectedSectors = _mapper.Map<List<SectorDto>>(sectors);
+            //return ApiResponse<List<SectorDto>>.SuccessResponse(selectedSectors);
+            return _sectorService.GetAllSectors();
         }
 
         [HttpGet]
@@ -47,44 +46,44 @@ namespace DenounceBeasts.API.Controllers
         public ActionResult<ApiResponse<SectorDto>> GetById(int id)
         {
             //var sector = _repo.GetById(id);
-            var sector = _unitOfWork.SectorRepository.GetById(id);
+            //var sector = _unitOfWork.SectorRepository.GetById(id);
 
-            if (sector == null) return NotFound();
+            //if (sector == null) return NotFound();
 
-            return ApiResponse<SectorDto>.SuccessResponse(_mapper.Map<SectorDto>(sector));
-
+            //return ApiResponse<SectorDto>.SuccessResponse(_mapper.Map<SectorDto>(sector));
+            return _sectorService.GetById(id);
         }
 
         [HttpGet]
         [Route("getSectorsByMunicipality/{id}")]
         public ActionResult<ApiResponse<SectorDto>> GetSectorsByMunicipality(int id)
         {
-            var sector = _unitOfWork.SectorRepository.GetSectorsByMunicipality(id);
+            //var sector = _unitOfWork.SectorRepository.GetSectorsByMunicipality(id);
 
-            if (sector == null) return NotFound();
+            //if (sector == null) return NotFound();
 
-            return ApiResponse<SectorDto>.SuccessResponse(_mapper.Map<SectorDto>(sector));
-
+            //return ApiResponse<SectorDto>.SuccessResponse(_mapper.Map<SectorDto>(sector));
+            return _sectorService.GetSectorsByMunicipality(id);
         }
 
         [HttpPost]
         public ActionResult<ApiResponse<int>> Create(SectorDto request)
         {
-            var sectorAtDb = _mapper.Map<Sector>(request);
-            var response = _unitOfWork.SectorRepository.Create(sectorAtDb);
-            _unitOfWork.Complete();
-            return ApiResponse<int>.SuccessResponse(response);
-
+            //var sectorAtDb = _mapper.Map<Sector>(request);
+            //var response = _unitOfWork.SectorRepository.Create(sectorAtDb);
+            //_unitOfWork.Complete();
+            //return ApiResponse<int>.SuccessResponse(response);
+            return _sectorService.Create(request);
         }
 
         [HttpPut]
         [Route("{id}")]
         public ActionResult Update(int id, SectorDto updatedSector)
         {
-            var sectorAtDb = _mapper.Map<Sector>(updatedSector);
-            _unitOfWork.SectorRepository.Update(id,sectorAtDb);
-            _unitOfWork.Complete();
-
+            //var sectorAtDb = _mapper.Map<Sector>(updatedSector);
+            //_unitOfWork.SectorRepository.Update(id, sectorAtDb);
+            //_unitOfWork.Complete();
+            _sectorService.Update(id, updatedSector);
             return NoContent();
         }
 
@@ -92,9 +91,9 @@ namespace DenounceBeasts.API.Controllers
         [Route("{id}")]
         public ActionResult Delete(int id)
         {
-            _unitOfWork.SectorRepository.Delete(id);
-            _unitOfWork.Complete();
-
+            //    _unitOfWork.SectorRepository.Delete(id);
+            //    _unitOfWork.Complete();
+            _sectorService.Delete(id);
             return NoContent();
         }
     }
