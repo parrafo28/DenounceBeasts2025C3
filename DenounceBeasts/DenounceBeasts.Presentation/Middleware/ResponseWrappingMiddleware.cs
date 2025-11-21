@@ -1,9 +1,11 @@
 ﻿using DenounceBeasts.API.Models.Response;
 using DenounceBeasts.API.Models.Responses;
+using DenounceBeasts.Business.Responses;
+using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Text.Json;
 
-namespace DenounceBeasts.API.Middleware
+namespace DenounceBeasts.Presentation.Middleware
 {
     public class ResponseWrappingMiddleware
     {

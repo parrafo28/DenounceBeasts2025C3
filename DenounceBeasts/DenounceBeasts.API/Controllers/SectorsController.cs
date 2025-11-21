@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using DenounceBeasts.Business.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SectorsController : ControllerBase
@@ -31,6 +33,7 @@ namespace DenounceBeasts.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult<List<SectorDto>> GetAll()
         {
             return _sectorService.GetAll();
@@ -39,10 +42,8 @@ namespace DenounceBeasts.API.Controllers
         [HttpGet]
         [Route("WithMunicipality")]
         public ActionResult<List<SectorDto>> GetAllWithMunicipality()
-        {
-
-            return _sectorService.GetAllWithMunicipality();
-
+        { 
+            return _sectorService.GetAllWithMunicipality(); 
         }
 
         [HttpGet]

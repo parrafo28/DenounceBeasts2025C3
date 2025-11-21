@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DenounceBeasts.Infrasctruct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DenounceBeasts.Business", "DenounceBeasts.Business\DenounceBeasts.Business.csproj", "{CDD43611-CC61-4EB4-BAB7-0BECE3B576BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DenounceBeasts.Presentation", "DenounceBeasts.Presentation\DenounceBeasts.Presentation.csproj", "{C17DC235-95A1-49D9-A3D2-D5EE9B941DD7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{CDD43611-CC61-4EB4-BAB7-0BECE3B576BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDD43611-CC61-4EB4-BAB7-0BECE3B576BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDD43611-CC61-4EB4-BAB7-0BECE3B576BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C17DC235-95A1-49D9-A3D2-D5EE9B941DD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17DC235-95A1-49D9-A3D2-D5EE9B941DD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17DC235-95A1-49D9-A3D2-D5EE9B941DD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17DC235-95A1-49D9-A3D2-D5EE9B941DD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

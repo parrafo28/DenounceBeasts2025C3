@@ -8,11 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\StatusControllerOld.cs" />
-    <Compile Remove="Middleware\ResponseWrappingMiddleware.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="15.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DenounceBeasts.Business\DenounceBeasts.Business.csproj" />
+    <ProjectReference Include="..\DenounceBeasts.Presentation\DenounceBeasts.Presentation.csproj" />
   </ItemGroup>
 
 </Project>

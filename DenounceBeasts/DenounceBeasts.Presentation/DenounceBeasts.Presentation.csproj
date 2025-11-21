@@ -7,12 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="15.1.0" />
-    <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
+    <Compile Remove="Middleware\ResponseWrappingMiddleware.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DenounceBeasts.Infrasctructure\DenounceBeasts.Infrasctructure.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DenounceBeasts.Business\DenounceBeasts.Business.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,6 +14,7 @@ namespace DenounceBeasts.Infrasctructure.Data
         public DbSet<Sector> Sectors { get; set; }
         public DbSet<ComplaintType> ComplaintTypes { get; set; }
         public DbSet<Status> Status { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

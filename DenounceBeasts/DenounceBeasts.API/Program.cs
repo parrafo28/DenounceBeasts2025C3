@@ -1,10 +1,15 @@
 using DenounceBeasts.API.Controllers;
-using DenounceBeasts.API.Middleware;
 using DenounceBeasts.Business.Profiles;
+using DenounceBeasts.Business.Services;
 using DenounceBeasts.Domain.Entities;
 using DenounceBeasts.Infrasctructure.Data;
 using DenounceBeasts.Infrasctructure.Repositories;
+using DenounceBeasts.Presentation.Filters;
+using DenounceBeasts.Presentation.Middleware;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +30,13 @@ builder.Services.AddTransient<SectorService>();
 
 //builder.Services.AddSingleton<StatusRepository>();
 //builder.Services.AddScoped<StatusRepository>();
+builder.Services.AddScoped<AuthService>();
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers(opp=> { 
+    opp.Filters.Add<ValidateModelFilter>();
+    });
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
@@ -39,10 +49,51 @@ var automapperLicence = builder.Configuration.GetSection("KeysConfigurations:Aut
 builder.Services.AddAutoMapper(cfg => cfg.LicenseKey = automapperLicence, typeof(MappingProfile));
 
 
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("frontend", p =>
+    {
+        var origins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+        p.WithOrigins(origins)
+         .AllowAnyHeader()
+         .AllowAnyMethod()
+         .AllowAnyOrigin()
+         //.AllowCredentials()
+         ; // quítalo si usas AllowAnyOrigin
+    });
 
+    // Política abierta (solo dev puntual)
+    o.AddPolicy("open-dev", p =>
+        p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
+var jwt = builder.Configuration.GetSection("Jwt");
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            
+            ValidateIssuer = true,
+            ValidIssuer = jwt["Issuer"],
+            ValidateAudience = true,
+            ValidAudience = jwt["Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = key,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(2)
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 
 var app = builder.Build();
+
+app.UseCors("frontend");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -50,6 +101,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("open-dev");
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -57,7 +109,9 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+ 
 
 app.MapControllers();
 
