@@ -66,7 +66,7 @@ namespace DenounceBeasts.API.Controllers
 
         [HttpPost]
         public ApiResponse<ComplaintTypeDto> Create(ComplaintTypeDto request)
-        {
+        { 
             var complaintType = new ComplaintType
             {
                 Description = request.Description,

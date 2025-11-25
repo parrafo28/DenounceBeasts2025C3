@@ -4,7 +4,7 @@ using DenounceBeasts.Infrasctructure.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DenounceBeasts.API.Controllers
+namespace DenounceBeasts.Presentation.Controllers
 {
     public class BaseController<T, TDto> : ControllerBase
         where T : class

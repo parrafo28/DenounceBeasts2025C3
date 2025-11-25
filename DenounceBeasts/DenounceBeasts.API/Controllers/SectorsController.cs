@@ -1,12 +1,12 @@
 ﻿using DenounceBeasts.Application.DTOs;
-using DenounceBeasts.Domain.Entities;
-using DenounceBeasts.Infrasctructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class SectorsController : ControllerBase
     {
         private readonly SectorService _sectorService;
@@ -21,7 +21,7 @@ namespace DenounceBeasts.API.Controllers
             //ApplicationDbContext context, 
             // IMapper mapper,
             //SectorRepository sectorRepository, MunicipalityRepository municipalityRepository,
-           // UnitOfWork unitOfWork 
+            // UnitOfWork unitOfWork 
             )
         {
             this._sectorService = sectorService;
@@ -34,13 +34,17 @@ namespace DenounceBeasts.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
+        //[Authorize(Roles ="User")]
         public ActionResult<IEnumerable<SectorDto>> GetAll()
         {
             return Ok(_sectorService.GetAll());
         }
 
         [HttpGet]
+        //[Authorize(Roles ="User")]
         [Route("with-municipality")]
+        [Authorize(Roles = "User,Admin")] 
         public ActionResult<IEnumerable<SectorDto>> GetAllWithMunicipality()
         {
             //var sectors = _unitOfWork.SectorRepository.GetAllWithMunicipality();
@@ -52,6 +56,7 @@ namespace DenounceBeasts.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public ActionResult<SectorDto> GetById(int id)
         {
             //var sector = _unitOfWork.SectorRepository.GetById(id);
@@ -103,6 +108,6 @@ namespace DenounceBeasts.API.Controllers
             //_unitOfWork.Complete();
             _sectorService.Delete(id);
             return NoContent();
-        } 
+        }
     }
 }

@@ -2,6 +2,7 @@
 using DenounceBeasts.Application.DTOs;
 using DenounceBeasts.Domain.Entities;
 using DenounceBeasts.Infrasctructure.Context;
+using DenounceBeasts.Presentation.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DenounceBeasts.API.Controllers
